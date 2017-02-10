@@ -120,10 +120,32 @@
 (defn full-iri [^Map pm ^String b ^String p ^String l ^clojure.lang.IFn pfx-gen]
   (if p [(if (empty? p) (keyword l) (keyword p l)) pm] (based-iri pm l b pfx-gen)))
 
+
+(defn modify-node [node] 
+  (if (keyword? node)
+    (let [id (str node)]
+      (if (re-find #"/$" id)
+        (let [node-name (last (re-matches #"^:(.+)/$" id))] ;; this is to avoid doubling up on // 
+          (keyword node-name "*"))
+        node))
+    node))
+
+(defn legalize [acc triple]
+ (conj acc (map modify-node triple)))
+
+(defn valid-triples
+  "returns a vector of valid triples"
+  [triples]
+  (let [legalized-triples (reduce legalize [] triples)]
+    legalized-triples)) 
+
+
 (defn triples-seq
   [^crg.turtle.Parser parser ^crg.turtle.TtlLexer lexer]
   (when-let [triples (.parse parser lexer)]
-    (concat triples (lazy-seq (triples-seq parser lexer)))))
+    (let [v-triples (valid-triples triples)]
+      (concat v-triples (lazy-seq (triples-seq parser lexer))))))
+
 
 (defprotocol TParser
   (get-triples [p])

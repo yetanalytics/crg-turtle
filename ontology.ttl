@@ -1,0 +1,54 @@
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xapi: <https://w3id.org/xapi/ontology#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+xapi: a owl:Ontology ;
+    rdfs:label "xAPI Vocabulary Dataset Schema"@en ;
+    dcterms:created "2015-11-19"^^xsd:date ;
+    dcterms:modified "2016-07-07"^^xsd:date ;
+    rdfs:comment "This ontology contains a list of the classes and properties that can be used when for creating and publishing a vocabulary dataset for xAPI."@en .
+
+xapi:AllDisjointClasses a owl:AllDisjointClasses ;
+    owl:members ( xapi:ActivityType xapi:Verb xapi:Extension ) .
+
+xapi:closelyRelatedNaturalLanguageTerm a owl:ObjectProperty ;
+    rdfs:label "closelyRelatedNaturalLanguageTerm"@en ;
+    rdfs:comment "A property used to connect the xAPI term to a specific sense, or meaning, in natural language that is very closely related. The sense will be identified with Wordnet, a carefully constructed ontology that aids in word sense disambiguation, which has been used with many different languages."@en ;
+    rdfs:domain skos:Concept ;
+    rdfs:range <http://wordnet-rdf.princeton.edu/ontology#Synset> ;
+    rdfs:subPropertyOf skos:relatedMatch .
+
+xapi:referencedBy a owl:ObjectProperty ;
+    rdfs:label "referencedBy"@en ;
+    rdfs:comment "A property used to connects an xapi:Verb  not directly maintained by the vocabulary author to a vocabulary that is reusing and referencing the term."@en ;
+    rdfs:range skos:ConceptScheme ;
+    rdfs:subPropertyOf skos:inScheme .
+
+xapi:thirdPartyLabel a owl:AnnotationProperty ;
+    rdfs:label "thirdPartyLabel"@en ;
+    rdfs:comment "A property used by people who did not create the original verb, but would like to offer an alternative label for it."@en ;
+    rdfs:subPropertyOf skos:altLabel .
+
+xapi:ActivityType a owl:Class ;
+    rdfs:label "ActivityType"@en ;
+    rdfs:comment "The Class for a Activity Type in an xAPI vocabulary or profile."@en ;
+    rdfs:subClassOf skos:Concept .
+
+xapi:Extension a owl:Class ;
+    rdfs:label "Extension"@en ;
+    rdfs:comment "The Class for an extension in an xAPI vocabulary or profile."@en ;
+    rdfs:subClassOf skos:Concept .
+
+xapi:Verb a owl:Class ;
+    rdfs:label "Verb"@en ;
+    rdfs:comment "The Class for a Verb in an xAPI vocabulary or profile."@en ;
+    rdfs:subClassOf skos:Concept .
+
+

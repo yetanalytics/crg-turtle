@@ -1,6 +1,7 @@
 (ns crg.turtle.core-test
   (:use clojure.test
-        crg.turtle.parser)
+        crg.turtle.parser
+        clojure.pprint)
   (:import [java.io ByteArrayInputStream]))
 
 (def t "@prefix : <http://example.org#> .
@@ -67,6 +68,18 @@ ex:data :hasCollection () .
 ( 1.0 ) :hasCollection ( 2 ) .
 <uri:1> <uri:2> <foo/bar> .
 ")
+
+
+(def broken-file (slurp "ontology.ttl"))
+
+(deftest broken-file-test
+  (testing "for triple keys with no forward slash..."
+    (let [s (ByteArrayInputStream. (.getBytes broken-file "UTF-8"))
+          parser (create-parser s)
+          triple-stream (get-triples parser)] 
+      (let [triples (into [] triple-stream)
+            empty-key (first (first triples))]
+        (is (= :xapi/* empty-key))))))
 
 (deftest structure-test
   (testing "Tests most triple forms available in Turtle."
